@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TravelScout — Itinerary Matcher</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f6f8fc;
+    color: #202020;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.ts-nav {
+    height: 70px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.ts-logo {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.ts-logo span {
+    color: #3975e6;
+}
+
+.ts-nav-links {
+    display: flex;
+    gap: 28px;
+}
+
+.ts-nav-links a {
+    text-decoration: none;
+    color: #667085;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.ts-nav-links a:hover,
+.ts-nav-links a.active {
+    color: #3975e6;
+}
+
+.ts-profile {
+    background: #111827;
+    color: white;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.ts-container {
+    max-width: 1050px;
+    margin: auto;
+    padding: 60px 25px;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.ts-hero {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.ts-hero h1 {
+    font-size: 42px;
+    margin: 0 0 12px;
+    letter-spacing: -1px;
+}
+
+.ts-hero h1 span {
+    color: #3975e6;
+}
+
+.ts-hero p {
+    max-width: 650px;
+    margin: auto;
+    color: #687386;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+
+/* =========================
+   MATCH PREFERENCES
+========================= */
+
+.ai-itinerary-box {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 7px 28px rgba(0,0,0,.06);
+    margin-bottom: 45px;
+}
+
+.ai-itinerary-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #202020;
+}
+
+.button-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.ai-choice {
+    flex: 1;
+    min-width: 140px;
+    padding: 14px 16px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(
+        135deg,
+        #1a4fd9 0%,
+        #0d2a8a 100%
+    );
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.ai-choice:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26,79,217,.35);
+}
+
+.ai-choice.secondary {
+    background: #f1f4f9;
+    color: #303030;
+    border: 1px solid #e0e4eb;
+}
+
+.ai-choice.secondary:hover {
+    background: #e8edf5;
+    box-shadow: none;
+}
+
+
+/* =========================
+   FILTER PANEL
+========================= */
+
+.filter-panel {
+    display: none;
+    background: #f8faff;
+    border: 1px solid #e0e8fa;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 18px;
+}
+
+.filter-panel.active {
+    display: block;
+}
+
+.filter-panel label {
+    display: block;
+    font-size: 12px;
+    color: #667085;
+    margin-bottom: 6px;
+    margin-top: 12px;
+}
+
+.filter-panel select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #d9dfe9;
+    border-radius: 8px;
+    background: white;
+    font-family: inherit;
+}
+
+.apply-btn {
+    margin-top: 15px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #3975e6;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+
+/* =========================
+   PACKAGES
+========================= */
+
+.matching-packages h2 {
+    margin: 0 0 24px;
+    font-size: 26px;
+    color: #101010;
+}
+
+.package-card {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-bottom: 28px;
+    padding: 22px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 7px 25px rgba(0,0,0,.05);
+    transition: .25s;
+}
+
+.package-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,.09);
+}
+
+.package-image {
+    width: 360px;
+    height: 230px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+.package-details {
+    flex: 1;
+}
+
+.package-details h3 {
+    margin: 0 0 22px;
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #292929;
+}
+
+.match-score {
+    margin: 0 0 8px;
+    font-size: 18px;
+    color: #252525;
+}
+
+.match-score strong {
+    font-weight: 800;
+    color: #3975e6;
+}
+
+.package-price {
+    margin: 0;
+    font-size: 17px;
+    color: #303030;
+}
+
+.package-button {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 11px 20px;
+    border-radius: 8px;
+    background: linear-gradient(
+        135deg,
+        #1a4fd9 0%,
+        #0d2a8a 100%
+    );
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.package-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(26,79,217,.35);
+}
+
+.package-note {
+    margin: 8px 0 0;
+    color: #777;
+    font-size: 12px;
+}
+
+
+/* =========================
+   PACKAGE POPUP
+========================= */
+
+.package-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.65);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.package-popup {
+    width: 100%;
+    max-width: 450px;
+    background: white;
+    border-radius: 22px;
+    padding: 30px;
+    animation: popup .25s ease;
+}
+
+.package-popup h2 {
+    margin-top: 0;
+}
+
+.package-popup p {
+    color: #667085;
+    line-height: 1.6;
+}
+
+.close-popup {
+    margin-top: 15px;
+    background: #111827;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 11px 20px;
+    cursor: pointer;
+}
+
+@keyframes popup {
+    from {
+        opacity: 0;
+        transform: scale(.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* =========================
+   NO RESULTS
+========================= */
+
+.no-results {
+    display: none;
+    text-align: center;
+    background: white;
+    padding: 45px 20px;
+    border-radius: 20px;
+    color: #667085;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 760px) {
+
+    .ts-nav-links {
+        display: none;
+    }
+
+    .ts-container {
+        padding: 35px 15px;
+    }
+
+    .ts-hero h1 {
+        font-size: 34px;
+    }
+
+    .package-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
+    }
+
+    .package-image {
+        width: 100%;
+        height: 230px;
+    }
+
+    .package-details h3 {
+        margin-bottom: 15px;
+        font-size: 19px;
+    }
+
+    .match-score,
+    .package-price {
+        font-size: 17px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="ts-nav">
+
+    <div class="ts-logo">
+        Travel<span>Scout</span>
+    </div>
+
+    <div class="ts-nav-links">
+
+        <a href="home.html">Home</a>
+
+        <a href="peoplem.html">Explore</a>
+
+        <a href="Recommendations.html" class="active">
+            Itinerary Matcher
+        </a>
+
+        <a href="Messages.html">Messages</a>
+
+    </div>
+
+    <button class="ts-profile">
+        My Profile
+    </button>
+
+</nav>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="ts-container">
+
+
+    <!-- HERO -->
+
+    <section class="ts-hero">
+
+        <h1>
+            Find your perfect
+            <span>travel itinerary.</span>
+        </h1>
+
+        <p>
+            TravelScout compares your travel preferences
+            with available packages and finds the options
+            that best match your plans.
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         PREFERENCES
+    ========================= -->
+
+    <section class="ai-itinerary-box">
+
+        <div class="ai-itinerary-title">
+            Your current travel preferences
+        </div>
+
+        <div class="button-row">
+
+            <button
+                class="ai-choice"
+                onclick="openFilter('destination')"
+                id="destinationButton"
+            >
+                📍 Nainital
+            </button>
+
+            <button
+                class="ai-choice secondary"
+                onclick="openFilter('budget')"
+                id="budgetButton"
+            >
+                ₹10k–20k
+            </button>
+
+            <button
+                class="ai-choice secondary"
+                onclick="openFilter('style')"
+                id="styleButton"
+            >
+                🧳 Solo
+            </button>
+
+        </div>
+
+
+        <!-- FILTER PANEL -->
+
+        <div
+            class="filter-panel"
+            id="filterPanel"
+        >
+
+            <label>
+                Destination
+            </label>
+
+            <select id="destinationSelect">
+
+                <option value="Nainital">
+                    Nainital
+                </option>
+
+                <option value="Manali">
+                    Manali
+                </option>
+
+                <option value="Goa">
+                    Goa
+                </option>
+
+                <option value="Rajasthan">
+                    Rajasthan
+                </option>
+
+            </select>
+
+
+            <label>
+                Budget
+            </label>
+
+            <select id="budgetSelect">
+
+                <option value="10k–20k">
+                    ₹10k–20k
+                </option>
+
+                <option value="20k–30k">
+                    ₹20k–30k
+                </option>
+
+                <option value="30k+">
+                    ₹30k+
+                </option>
+
+            </select>
+
+
+            <label>
+                Travel Style
+            </label>
+
+            <select id="styleSelect">
+
+                <option value="Solo">
+                    Solo
+                </option>
+
+                <option value="Adventure">
+                    Adventure
+                </option>
+
+                <option value="Luxury">
+                    Luxury
+                </option>
+
+                <option value="Budget">
+                    Budget
+                </option>
+
+            </select>
+
+
+            <button
+                class="apply-btn"
+                onclick="applyFilters()"
+            >
+                Update Matches
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         PACKAGES
+    ========================= -->
+
+    <section class="matching-packages">
+
+        <h2>
+            Matching Travel Packages
+        </h2>
+
+
+        <!-- PACKAGE 1 -->
+
+        <div
+            class="package-card"
+            data-destination="Nainital"
+            data-budget="10k–20k"
+        >
+
+            <img
+                class="package-image"
+                src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=80"
+                alt="Travel map and luggage"
+            >
+
+            <div class="package-details">
+
+                <h3>
+                    Dinesh Travel Agency package
+                </h3>
+
+                <p class="match-score">
+                    <strong>90%</strong>
+                    match with your itinerary
+                </p>
+
+                <p class="package-price">
+                    Price:
+                    <strong>₹12,000 INR</strong>
+                </p>
+
+                <p class="package-note">
+                    Nainital · 4 Days · 3 Nights
+                </p>
+
+                <a
+                    class="package-button"
+                    href="#"
+                    onclick="viewPackage(event, 'Dinesh Travel Agency')"
+                >
+                    View Package
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- PACKAGE 2 -->
+
+        <div
+            class="package-card"
+            data-destination="Nainital"
+            data-budget="10k–20k"
+        >
+
+            <img
+                class="package-image"
+                src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=900&q=80"
+                alt="Travel bag and destination map"
+            >
+
+            <div class="package-details">
+
+                <h3>
+                    Thomas Cook Deluxe Package
+                </h3>
+
+                <p class="match-score">
+                    <strong>87%</strong>
+                    match with your itinerary
+                </p>
+
+                <p class="package-price">
+                    Price:
+                    <strong>₹18,999 INR</strong>
+                </p>
+
+                <p class="package-note">
+                    Nainital · 5 Days · 4 Nights
+                </p>
+
+                <a
+                    class="package-button"
+                    href="#"
+                    onclick="viewPackage(event, 'Thomas Cook Deluxe Package')"
+                >
+                    View Package
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- PACKAGE 3 -->
+
+        <div
+            class="package-card"
+            data-destination="Manali"
+            data-budget="20k–30k"
+        >
+
+            <img
+                class="package-image"
+                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=900&q=80"
+                alt="Mountain travel destination"
+            >
+
+            <div class="package-details">
+
+                <h3>
+                    Himalayan Adventure Package
+                </h3>
+
+                <p class="match-score">
+                    <strong>82%</strong>
+                    match with your itinerary
+                </p>
+
+                <p class="package-price">
+                    Price:
+                    <strong>₹24,500 INR</strong>
+                </p>
+
+                <p class="package-note">
+                    Manali · 6 Days · 5 Nights
+                </p>
+
+                <a
+                    class="package-button"
+                    href="#"
+                    onclick="viewPackage(event, 'Himalayan Adventure Package')"
+                >
+                    View Package
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- PACKAGE 4 -->
+
+        <div
+            class="package-card"
+            data-destination="Goa"
+            data-budget="20k–30k"
+        >
+
+            <img
+                class="package-image"
+                src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=900&q=80"
+                alt="Goa beach"
+            >
+
+            <div class="package-details">
+
+                <h3>
+                    Goa Solo Explorer Package
+                </h3>
+
+                <p class="match-score">
+                    <strong>78%</strong>
+                    match with your itinerary
+                </p>
+
+                <p class="package-price">
+                    Price:
+                    <strong>₹22,999 INR</strong>
+                </p>
+
+                <p class="package-note">
+                    Goa · 5 Days · 4 Nights
+                </p>
+
+                <a
+                    class="package-button"
+                    href="#"
+                    onclick="viewPackage(event, 'Goa Solo Explorer Package')"
+                >
+                    View Package
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- NO RESULTS -->
+
+        <div
+            class="no-results"
+            id="noResults"
+        >
+
+            <h3>
+                No exact matches found
+            </h3>
+
+            <p>
+                Try changing your destination or budget
+                to discover more travel packages.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================
+     PACKAGE POPUP
+========================= -->
+
+<div
+    class="package-overlay"
+    id="packageOverlay"
+>
+
+    <div class="package-popup">
+
+        <h2 id="popupTitle">
+            Package Details
+        </h2>
+
+        <p id="popupText">
+            Package information.
+        </p>
+
+        <button
+            class="close-popup"
+            onclick="closePackage()"
+        >
+            Close
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   FILTER PANEL
+========================= */
+
+function openFilter(type) {
+
+    const panel =
+        document.getElementById("filterPanel");
+
+    panel.classList.toggle("active");
+
+}
+
+
+/* =========================
+   APPLY FILTERS
+========================= */
+
+function applyFilters() {
+
+    const destination =
+        document.getElementById(
+            "destinationSelect"
+        ).value;
+
+    const budget =
+        document.getElementById(
+            "budgetSelect"
+        ).value;
+
+    const style =
+        document.getElementById(
+            "styleSelect"
+        ).value;
+
+
+    /* Update preference buttons */
+
+    document.getElementById(
+        "destinationButton"
+    ).textContent =
+        "📍 " + destination;
+
+    document.getElementById(
+        "budgetButton"
+    ).textContent =
+        "₹" + budget;
+
+    document.getElementById(
+        "styleButton"
+    ).textContent =
+        "🧳 " + style;
+
+
+    /* Find packages */
+
+    const packages =
+        document.querySelectorAll(
+            ".package-card"
+        );
+
+    let visibleCount = 0;
+
+
+    packages.forEach(function(card) {
+
+        const cardDestination =
+            card.dataset.destination;
+
+        const cardBudget =
+            card.dataset.budget;
+
+
+        /*
+           Exact destination matching.
+           Budget is treated as a broad preference.
+        */
+
+        if (
+            cardDestination === destination &&
+            (
+                cardBudget === budget ||
+                budget === "30k+"
+            )
+        ) {
+
+            card.style.display = "flex";
+
+            visibleCount++;
+
+        } else {
+
+            card.style.display = "none";
+
+        }
+
+    });
+
+
+    /* Show empty state */
+
+    document.getElementById(
+        "noResults"
+    ).style.display =
+        visibleCount === 0
+            ? "block"
+            : "none";
+
+
+    /* Close filter */
+
+    document.getElementById(
+        "filterPanel"
+    ).classList.remove("active");
+
+}
+
+
+/* =========================
+   VIEW PACKAGE
+========================= */
+
+function viewPackage(event, packageName) {
+
+    event.preventDefault();
+
+    document.getElementById(
+        "popupTitle"
+    ).textContent =
+        packageName;
+
+
+    document.getElementById(
+        "popupText"
+    ).textContent =
+        "This is a demo package page. In the full TravelScout platform, this button would open the complete itinerary, inclusions, exclusions, accommodation details, activities and booking information for " +
+        packageName +
+        ".";
+
+
+    document.getElementById(
+        "packageOverlay"
+    ).style.display =
+        "flex";
+
+}
+
+
+/* =========================
+   CLOSE POPUP
+========================= */
+
+function closePackage() {
+
+    document.getElementById(
+        "packageOverlay"
+    ).style.display =
+        "none";
+
+}
+
+
+/* =========================
+   CLOSE POPUP ON BACKGROUND
+========================= */
+
+document.getElementById(
+    "packageOverlay"
+).addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target === this
+        ) {
+
+            closePackage();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
+```

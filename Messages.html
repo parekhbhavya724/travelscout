@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WanderConnect — Messages</title>
+
+  <style>
+    :root {
+      --primary: #3975e6;
+      --primary-dark: #285cbd;
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #8a93a3;
+      --line: #edf0f5;
+      --message-bg: #edf4ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      display: flex;
+      max-width: 1400px;
+      min-height: 100vh;
+      margin: auto;
+      background: var(--surface);
+      box-shadow: 0 0 30px rgba(22, 32, 51, 0.06);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 390px;
+      min-width: 330px;
+      border-right: 1px solid var(--line);
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 25px 24px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+      .goback-button{
+      width: 85px;
+      height: 44px;
+      border: none;
+      border-radius: 15%;
+      color: #fff;
+      background: var(--primary);
+      font-size: 26px;
+      line-height: 1;
+      transition: background 0.2s, transform 0.2s;
+    }
+      .compose-btn{
+        width: 44px;
+        height: 44px;
+        border: none;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--primary);
+        font-size: 26px;
+        line-height: 1;
+        transition: background 0.2s, transform 0.2s;
+      }
+
+
+    .compose-btn:hover {
+      background: var(--primary-dark);
+      transform: scale(1.05);
+    }
+
+      .goback-button:hover {
+        background: var(--primary-dark);
+        transform: scale(1.05);
+      }
+
+      
+      
+    .search-wrap {
+      position: relative;
+      margin-top: 20px;
+    }
+
+    .search-wrap span {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    #searchInput {
+      width: 100%;
+      padding: 13px 14px 13px 40px;
+      border: 1px solid #dfe5ef;
+      border-radius: 12px;
+      outline: none;
+      background: #f8faff;
+      color: var(--text);
+    }
+
+    #searchInput:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(57, 117, 230, 0.12);
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .filter-btn {
+      padding: 8px 13px;
+      border: 1px solid #e3e8f1;
+      border-radius: 20px;
+      color: #667085;
+      background: #fff;
+      font-size: 13px;
+    }
+
+    .filter-btn.active {
+      color: var(--primary);
+      border-color: #cddcff;
+      background: #edf3ff;
+    }
+
+    .conversation-list {
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .conversation {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 17px 24px;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .conversation:hover,
+    .conversation.active {
+      background: #f5f8ff;
+    }
+
+    .conversation.active {
+      border-left: 4px solid var(--primary);
+      padding-left: 20px;
+    }
+
+    .avatar {
+      width: 56px;
+      height: 56px;
+      min-width: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      font-size: 25px;
+    }
+
+    .person-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .person-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .person-name {
+      font-size: 15px;
+    }
+
+    .time {
+      flex-shrink: 0;
+      color: #98a1b1;
+      font-size: 12px;
+    }
+
+    .preview {
+      margin: 6px 0 0;
+      overflow: hidden;
+      color: #717b8d;
+      font-size: 13px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .unread-dot {
+      width: 9px;
+      height: 9px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    .empty-state {
+      padding: 42px 24px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* Chat */
+    .chat-panel {
+      display: flex;
+      flex: 1;
+      min-width: 0;
+      flex-direction: column;
+      background: #f9fbff;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .chat-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-user .avatar {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      font-size: 20px;
+    }
+
+    .chat-user h2 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .status {
+      margin: 4px 0 0;
+      color: #51a66d;
+      font-size: 12px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border: 1px solid #e5eaf2;
+      border-radius: 10px;
+      background: #fff;
+      color: #647084;
+      font-size: 17px;
+    }
+
+    .icon-btn:hover {
+      color: var(--primary);
+      background: #f2f6ff;
+    }
+
+    .messages {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+      padding: 28px;
+    }
+
+    .date-divider {
+      align-self: center;
+      padding: 7px 11px;
+      border-radius: 20px;
+      color: #7e8797;
+      background: #edf0f5;
+      font-size: 12px;
+    }
+
+    .message-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 9px;
+      max-width: 75%;
+    }
+
+    .message-row.mine {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      flex-shrink: 0;
+      place-items: center;
+      border-radius: 50%;
+      font-size: 14px;
+    }
+
+    .bubble {
+      padding: 12px 14px;
+      border-radius: 16px 16px 16px 4px;
+      color: #344054;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(30, 45, 80, 0.05);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .mine .bubble {
+      border-radius: 16px 16px 4px 16px;
+      color: #fff;
+      background: var(--primary);
+    }
+
+    .message-time {
+      margin-top: 5px;
+      color: #99a3b4;
+      font-size: 11px;
+    }
+
+    .mine .message-time {
+      text-align: right;
+    }
+
+    .chat-input-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 28px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .attachment-btn {
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 10px;
+      color: #718096;
+      background: #f1f4f8;
+      font-size: 18px;
+    }
+
+    #messageInput {
+      flex: 1;
+      padding: 13px 15px;
+      border: 1px solid #dfe5ef;
+      border-radius: 12px;
+      outline: none;
+    }
+
+    #messageInput:focus {
+      border-color: var(--primary);
+    }
+
+    .send-btn {
+      width: 44px;
+      height: 42px;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      background: var(--primary);
+      font-size: 17px;
+    }
+
+    .send-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      z-index: 10;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(17, 24, 39, 0.45);
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal {
+      width: min(440px, 100%);
+      padding: 26px;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal h2 {
+      margin: 0 0 8px;
+      font-size: 21px;
+    }
+
+    .modal p {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .modal label {
+      display: block;
+      margin: 14px 0 7px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .modal input,
+    .modal textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #dfe5ef;
+      border-radius: 10px;
+      outline: none;
+      resize: vertical;
+    }
+
+    .modal input:focus,
+    .modal textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .cancel-btn,
+    .start-btn {
+      padding: 10px 16px;
+      border-radius: 9px;
+      font-weight: bold;
+    }
+
+    .cancel-btn {
+      border: 1px solid #dce2eb;
+      color: #667085;
+      background: #fff;
+    }
+
+    .start-btn {
+      border: none;
+      color: #fff;
+      background: var(--primary);
+    }
+
+    /* Mobile */
+    @media (max-width: 760px) {
+      .app {
+        display: block;
+      }
+
+      .sidebar {
+        width: 100%;
+        min-width: 0;
+        min-height: 100vh;
+      }
+
+      .chat-panel {
+        display: none;
+        position: fixed;
+        z-index: 5;
+        inset: 0;
+      }
+
+      .chat-panel.mobile-open {
+        display: flex;
+      }
+
+      .conversation-list {
+        max-height: calc(100vh - 185px);
+      }
+
+      .back-btn {
+        display: inline-block;
+      }
+    }
+
+    @media (min-width: 761px) {
+      .back-btn {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <aside class="sidebar">
+      <header class="sidebar-header">
+        <div class="top-row">
+          <div>
+              <button class="goback-button" onclick="history.back()"> ←</button>
+
+            <h1>Messages</h1>
+            <p class="subtitle">Connect with fellow travelers</p>
+          </div>
+          <button class="compose-btn" id="composeBtn" aria-label="Start a new conversation">+</button>
+        </div>
+
+        <div class="search-wrap">
+          <span>⌕</span>
+          <input id="searchInput" type="search" placeholder="Search conversations..." />
+        </div>
+        <div class="filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="unread">Unread</button>
+        </div>
+      </header>
+
+      
+      
+      <section class="conversation-list" id="conversationList">
+        <article class="conversation active" data-name="Arjun Mehta" data-unread="false" data-avatar="👨🏻" data-color="#d9e7ff">
+          <div class="avatar" style="background:#d9e7ff">👨🏻</div>
+          <div class="person-info">
+            <div class="person-top">
+              <strong class="person-name">Arjun Mehta</strong>
+              <span class="time">2m</span>
+            </div>
+            <p class="preview">Are you still going to Goa next week?</p>
+          </div>
+        </article>
+
+        <article class="conversation" data-name="Sarah Wilson" data-unread="true" data-avatar="👩🏻" data-color="#ffe0e8">
+          <div class="avatar" style="background:#ffe0e8">👩🏻</div>
+          <div class="person-info">
+            <div class="person-top">
+              <strong class="person-name">Sarah Wilson</strong>
+              <span class="time">15m</span>
+            </div>
+            <p class="preview">That itinerary looks amazing!</p>
+          </div>
+          <span class="unread-dot"></span>
+        </article>
+
+        <article class="conversation" data-name="Rohan Shah" data-unread="false" data-avatar="👨🏽" data-color="#e2f5dc">
+          <div class="avatar" style="background:#e2f5dc">👨🏽</div>
+          <div class="person-info">
+            <div class="person-top">
+              <strong class="person-name">Rohan Shah</strong>
+              <span class="time">1h</span>
+            </div>
+            <p class="preview">Found another person going to Manali!</p>
+          </div>
+        </article>
+
+        <article class="conversation" data-name="Maya Patel" data-unread="false" data-avatar="👩🏽" data-color="#fff0d5">
+          <div class="avatar" style="background:#fff0d5">👩🏽</div>
+          <div class="person-info">
+            <div class="person-top">
+              <strong class="person-name">Maya Patel</strong>
+              <span class="time">3h</span>
+            </div>
+            <p class="preview">Thanks! I'll check the recommendations.</p>
+          </div>
+        </article>
+
+        <article class="conversation" data-name="Kabir Rao" data-unread="false" data-avatar="👨🏼" data-color="#e9ddff">
+          <div class="avatar" style="background:#e9ddff">👨🏼</div>
+          <div class="person-info">
+            <div class="person-top">
+              <strong class="person-name">Kabir Rao</strong>
+              <span class="time">Yesterday</span>
+            </div>
+            <p class="preview">Which places are you visiting in Delhi?</p>
+          </div>
+        </article>
+
+        <article class="conversation" data-name="Priya Nair" data-unread="false" data-avatar="👩🏼" data-color="#dff4f4">
+          <div class="avatar" style="background:#dff4f4">👩🏼</div>
+          <div class="person-info">
+            <div class="person-top">
+              <strong class="person-name">Priya Nair</strong>
+              <span class="time">Yesterday</span>
+            </div>
+            <p class="preview">Let's plan the trip together!</p>
+          </div>
+        </article>
+
+        <article class="conversation" data-name="Dev Malhotra" data-unread="false" data-avatar="👨🏾" data-color="#ffe4d5">
+          <div class="avatar" style="background:#ffe4d5">👨🏾</div>
+          <div class="person-info">
+            <div class="person-top">
+              <strong class="person-name">Dev Malhotra</strong>
+              <span class="time">2d</span>
+            </div>
+            <p class="preview">Have you decided where you're staying?</p>
+          </div>
+        </article>
+
+        <div class="empty-state" id="emptyState" hidden>
+          No conversations found.
+        </div>
+      </section>
+    </aside>
+
+    <section class="chat-panel" id="chatPanel">
+      <header class="chat-header">
+        <div class="chat-user">
+          <button class="icon-btn back-btn" id="backBtn" aria-label="Back to messages">←</button>
+          <div class="avatar" id="chatAvatar" style="background:#d9e7ff">👨🏻</div>
+          <div>
+            <h2 id="chatName">Arjun Mehta</h2>
+            <p class="status">● Active now</p>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button class="icon-btn" aria-label="Start voice call">☎</button>
+          <button class="icon-btn" aria-label="Conversation settings">⋮</button>
+        </div>
+      </header>
+
+      <div class="messages" id="messages">
+        <div class="date-divider">Today</div>
+
+        <div class="message-row">
+          <div class="message-avatar" style="background:#d9e7ff">👨🏻</div>
+          <div>
+            <div class="bubble">Hey! I saw that you're planning a Goa trip next week.</div>
+            <div class="message-time">10:24 AM</div>
+          </div>
+        </div>
+
+        <div class="message-row mine">
+          <div>
+            <div class="bubble">Yes! I'm heading there next Friday. I am still deciding between North Goa and South Goa.</div>
+            <div class="message-time">10:27 AM</div>
+          </div>
+        </div>
+
+        <div class="message-row">
+          <div class="message-avatar" style="background:#d9e7ff">👨🏻</div>
+          <div>
+            <div class="bubble">Nice, me too. Are you still going to Goa next week?</div>
+            <div class="message-time">10:31 AM</div>
+          </div>
+        </div>
+      </div>
+
+      <form class="chat-input-area" id="messageForm">
+        <button type="button" class="attachment-btn" aria-label="Attach a file">+</button>
+        <input id="messageInput" type="text" placeholder="Write a message..." autocomplete="off" />
+        <button type="submit" class="send-btn" aria-label="Send message">➤</button>
+      </form>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h2 id="modalTitle">Start a new conversation</h2>
+      <p>Find a traveler and begin planning your next adventure.</p>
+
+      <label for="newContact">Traveler name</label>
+      <input id="newContact" type="text" placeholder="e.g. Ananya Sharma" />
+
+      <label for="newMessage">First message</label>
+      <textarea id="newMessage" rows="4" placeholder="Hi! I saw you're planning a trip..."></textarea>
+
+      <div class="modal-actions">
+        <button class="cancel-btn" id="cancelBtn">Cancel</button>
+        <button class="start-btn" id="startBtn">Start chat</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const conversations = document.querySelectorAll(".conversation");
+    const chatPanel = document.getElementById("chatPanel");
+    const chatName = document.getElementById("chatName");
+    const chatAvatar = document.getElementById("chatAvatar");
+    const messages = document.getElementById("messages");
+    const searchInput = document.getElementById("searchInput");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const emptyState = document.getElementById("emptyState");
+    const messageForm = document.getElementById("messageForm");
+    const messageInput = document.getElementById("messageInput");
+
+    const composeBtn = document.getElementById("composeBtn");
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const startBtn = document.getElementById("startBtn");
+    const newContact = document.getElementById("newContact");
+    const newMessage = document.getElementById("newMessage");
+    const backBtn = document.getElementById("backBtn");
+
+    let currentFilter = "all";
+
+    function selectConversation(conversation) {
+      conversations.forEach(item => item.classList.remove("active"));
+      conversation.classList.add("active");
+
+      const name = conversation.dataset.name;
+      const avatar = conversation.dataset.avatar;
+      const color = conversation.dataset.color;
+
+      chatName.textContent = name;
+      chatAvatar.textContent = avatar;
+      chatAvatar.style.background = color;
+
+      const dot = conversation.querySelector(".unread-dot");
+      if (dot) dot.remove();
+      conversation.dataset.unread = "false";
+
+      messages.innerHTML = `
+        <div class="date-divider">Today</div>
+        <div class="message-row">
+          <div class="message-avatar" style="background:${color}">${avatar}</div>
+          <div>
+            <div class="bubble">${conversation.querySelector(".preview").textContent}</div>
+            <div class="message-time">Just now</div>
+          </div>
+        </div>
+      `;
+
+      chatPanel.classList.add("mobile-open");
+      messageInput.focus();
+    }
+
+    conversations.forEach(conversation => {
+      conversation.addEventListener("click", () => selectConversation(conversation));
+    });
+
+    function applyFilters() {
+      const query = searchInput.value.toLowerCase().trim();
+      let visibleCount = 0;
+
+      conversations.forEach(conversation => {
+        const name = conversation.dataset.name.toLowerCase();
+        const preview = conversation.querySelector(".preview").textContent.toLowerCase();
+        const isUnread = conversation.dataset.unread === "true";
+
+        const matchesSearch = name.includes(query) || preview.includes(query);
+        const matchesFilter = currentFilter === "all" || isUnread;
+
+        const shouldShow = matchesSearch && matchesFilter;
+        conversation.style.display = shouldShow ? "flex" : "none";
+
+        if (shouldShow) visibleCount++;
+      });
+
+      emptyState.hidden = visibleCount !== 0;
+    }
+
+    searchInput.addEventListener("input", applyFilters);
+
+    filterButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        filterButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+        currentFilter = button.dataset.filter;
+        applyFilters();
+      });
+    });
+
+    messageForm.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const text = messageInput.value.trim();
+      if (!text) return;
+
+      const currentTime = new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
+      const messageRow = document.createElement("div");
+      messageRow.className = "message-row mine";
+      messageRow.innerHTML = `
+        <div>
+          <div class="bubble"></div>
+          <div class="message-time">${currentTime}</div>
+        </div>
+      `;
+
+      messageRow.querySelector(".bubble").textContent = text;
+      messages.appendChild(messageRow);
+      messages.scrollTop = messages.scrollHeight;
+
+      const activeConversation = document.querySelector(".conversation.active");
+      if (activeConversation) {
+        activeConversation.querySelector(".preview").textContent = `You: ${text}`;
+        activeConversation.querySelector(".time").textContent = "Now";
+      }
+
+      messageInput.value = "";
+    });
+
+    composeBtn.addEventListener("click", () => {
+      modalBackdrop.classList.add("show");
+      newContact.focus();
+    });
+
+    function closeModal() {
+      modalBackdrop.classList.remove("show");
+      newContact.value = "";
+      newMessage.value = "";
+    }
+
+    cancelBtn.addEventListener("click", closeModal);
+
+    modalBackdrop.addEventListener("click", event => {
+      if (event.target === modalBackdrop) closeModal();
+    });
+
+    startBtn.addEventListener("click", () => {
+      const name = newContact.value.trim();
+      const firstMessage = newMessage.value.trim();
+
+      if (!name) {
+        newContact.focus();
+        return;
+      }
+
+      chatName.textContent = name;
+      chatAvatar.textContent = "🧳";
+      chatAvatar.style.background = "#e5edff";
+
+      messages.innerHTML = `
+        <div class="date-divider">Today</div>
+        <div class="message-row mine">
+          <div>
+            <div class="bubble">${firstMessage || `Hi ${name}, nice to connect with you!`}</div>
+            <div class="message-time">Now</div>
+          </div>
+        </div>
+      `;
+
+      closeModal();
+      chatPanel.classList.add("mobile-open");
+    });
+
+    backBtn.addEventListener("click", () => {
+      chatPanel.classList.remove("mobile-open");
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,850 @@
+
+
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        background: #f5f7fb;
+        color: #111827;
+    }
+
+    
+    
+* {
+    box-sizing: border-box;
+}
+
+.ts-home {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 40px 20px 60px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    color: #111827;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.ts-home-navbar {
+    width: 100%;
+    height: 70px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 5%;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.ts-home-logo {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.ts-home-logo span {
+    color: #1677ff;
+}
+
+.ts-home-nav-links {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+}
+
+.ts-home-nav-links a {
+    text-decoration: none;
+    color: #4b5563;
+    font-size: 14px;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.ts-home-nav-links a:hover,
+.ts-home-nav-links a.active {
+    color: #1677ff;
+}
+
+.ts-home-profile {
+    background: #111827;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 9px 17px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.ts-home-hero {
+    background: #111827;
+    color: white;
+    border-radius: 25px;
+
+    padding: 48px 45px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 30px;
+
+    margin-bottom: 35px;
+}
+
+.ts-home-hero-text {
+    max-width: 650px;
+}
+
+.ts-home-eyebrow {
+    color: #60a5fa;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.ts-home-hero h1 {
+    font-size: 42px;
+    line-height: 1.1;
+    margin: 0 0 16px;
+}
+
+.ts-home-hero h1 span {
+    color: #1677ff;
+}
+
+.ts-home-hero p {
+    color: #c5ccd8;
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 600px;
+}
+
+.ts-home-hero-button {
+    display: inline-block;
+    margin-top: 24px;
+
+    background: #1677ff;
+    color: white;
+
+    padding: 13px 22px;
+    border-radius: 9px;
+
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+
+    transition: .2s;
+}
+
+.ts-home-hero-button:hover {
+    background: #0b63dc;
+    color: white;
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   MAIN GRID
+========================= */
+
+.ts-home-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 310px;
+    gap: 40px;
+    align-items: start;
+}
+
+
+/* =========================
+   SECTION TITLE
+========================= */
+
+.ts-home-title {
+    font-size: 25px;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.ts-home-subtitle {
+    color: #6b7280;
+    font-size: 14px;
+    margin-top: -12px;
+    margin-bottom: 22px;
+}
+
+
+/* =========================
+   FEATURE CARDS
+========================= */
+
+.ts-home-features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.ts-home-feature {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+
+    padding: 25px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.06);
+
+    transition: .2s;
+}
+
+.ts-home-feature:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(0,0,0,.10);
+}
+
+.ts-home-feature-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eff6ff;
+    border-radius: 14px;
+
+    font-size: 23px;
+
+    margin-bottom: 18px;
+}
+
+.ts-home-feature h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.ts-home-feature p {
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.55;
+    margin-bottom: 18px;
+}
+
+.ts-home-feature a {
+    color: #1677ff;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+
+/* =========================
+   UPCOMING TRIP
+========================= */
+
+.ts-upcoming {
+    margin-top: 30px;
+}
+
+.ts-trip-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 22px;
+
+    padding: 25px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.06);
+}
+
+.ts-trip-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+}
+
+.ts-trip-location {
+    color: #1677ff;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+}
+
+.ts-trip-card h3 {
+    font-size: 23px;
+    margin: 7px 0;
+}
+
+.ts-trip-info {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.ts-trip-button {
+    background: #1677ff;
+    color: white;
+
+    border: none;
+    border-radius: 8px;
+
+    padding: 11px 18px;
+
+    font-weight: 700;
+    font-size: 13px;
+
+    cursor: pointer;
+}
+
+.ts-trip-button:hover {
+    background: #0b63dc;
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.ts-home-sidebar {
+    background: #111827;
+    color: white;
+
+    border-radius: 22px;
+
+    padding: 25px;
+
+    position: sticky;
+    top: 95px;
+}
+
+.ts-home-sidebar h3 {
+    margin-bottom: 6px;
+    font-size: 19px;
+}
+
+.ts-home-sidebar > p {
+    color: #9ca3af;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+
+/* PROFILE */
+
+.ts-home-user {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    padding-bottom: 20px;
+    border-bottom: 1px solid #293242;
+    margin-bottom: 10px;
+}
+
+.ts-home-avatar {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+
+    background: #1677ff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+}
+
+.ts-home-user-name {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.ts-home-user-location {
+    color: #9ca3af;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+
+/* PREFERENCES */
+
+.ts-home-preference {
+    padding: 14px 0;
+    border-bottom: 1px solid #293242;
+}
+
+.ts-home-preference-label {
+    color: #9ca3af;
+    font-size: 10px;
+
+    text-transform: uppercase;
+    letter-spacing: .7px;
+
+    margin-bottom: 5px;
+}
+
+.ts-home-preference-value {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* PROGRESS */
+
+.ts-home-progress-title {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 22px;
+
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.ts-home-progress {
+    height: 6px;
+
+    background: #293242;
+
+    border-radius: 10px;
+
+    margin-top: 8px;
+
+    overflow: hidden;
+}
+
+.ts-home-progress-bar {
+    height: 100%;
+    width: 82%;
+
+    background: #1677ff;
+
+    border-radius: 10px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 850px) {
+
+    .ts-home-nav-links {
+        display: none;
+    }
+
+    .ts-home-content {
+        grid-template-columns: 1fr;
+    }
+
+    .ts-home-sidebar {
+        position: static;
+        order: 2;
+    }
+
+    .ts-home-hero {
+        padding: 35px 28px;
+    }
+
+    .ts-home-hero h1 {
+        font-size: 34px;
+    }
+}
+
+
+@media (max-width: 550px) {
+
+    .ts-home-navbar {
+        padding: 0 18px;
+    }
+
+    .ts-home-profile {
+        display: none;
+    }
+
+    .ts-home {
+        padding: 25px 12px 40px;
+    }
+
+    .ts-home-hero {
+        padding: 30px 22px;
+    }
+
+    .ts-home-hero h1 {
+        font-size: 29px;
+    }
+
+    .ts-home-features {
+        grid-template-columns: 1fr;
+    }
+
+    .ts-trip-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+}
+
+</style>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="ts-home-navbar">
+
+    <div class="ts-home-logo">
+        Travel<span>Scout</span>
+    </div>
+
+    <div class="ts-home-nav-links">
+
+        <a href="home.html" class="active">Home</a>
+
+        <a href="peoplem.html">Explore</a>
+
+        <a href="Recommendations.html">
+            Itinerary Matcher
+        </a>
+
+        <a href="Messages.html">Messages</a>
+
+    </div>
+
+    <button class="ts-home-profile">
+        My Profile
+    </button>
+
+</nav>
+
+
+<!-- =========================
+     PAGE
+========================= -->
+
+<div class="ts-home">
+
+
+    <!-- HERO -->
+
+    <section class="ts-home-hero">
+
+        <div class="ts-home-hero-text">
+
+            <div class="ts-home-eyebrow">
+                YOUR PERSONAL TRAVEL COMPANION
+            </div>
+
+            <h1>
+                Where will your next
+                <span>adventure</span> take you?
+            </h1>
+
+            <p>
+                Discover new destinations, find travellers who match
+                your vibe and build the perfect itinerary with
+                TravelScout.
+            </p>
+
+            <a href="#" class="ts-home-hero-button">
+                Start Exploring →
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- MAIN -->
+
+    <div class="ts-home-content">
+
+
+        <!-- LEFT -->
+
+        <main>
+
+            <div class="ts-home-title">
+                What are you looking for?
+            </div>
+
+            <div class="ts-home-subtitle">
+                Everything you need for your next trip.
+            </div>
+
+
+            <div class="ts-home-features">
+
+
+                <!-- AI -->
+
+                <div class="ts-home-feature">
+
+                    <div class="ts-home-feature-icon">
+                        ✨
+                    </div>
+
+                    <h3>
+                        AI Recommendations
+                    </h3>
+
+                    <p>
+                        Get personalized destinations, activities,
+                        food and experiences based on your interests.
+                    </p>
+
+                    <a href="#">
+                        Get Recommendations →
+                    </a>
+
+                </div>
+
+
+                <!-- PEOPLE -->
+
+                <div class="ts-home-feature">
+
+                    <div class="ts-home-feature-icon">
+                        👥
+                    </div>
+
+                    <h3>
+                        Find Your People
+                    </h3>
+
+                    <p>
+                        Match with travellers who share your
+                        destination, interests and travel style.
+                    </p>
+
+                    <a href="#">
+                        Find Travellers →
+                    </a>
+
+                </div>
+
+
+                <!-- ITINERARY -->
+
+                <div class="ts-home-feature">
+
+                    <div class="ts-home-feature-icon">
+                        🗺️
+                    </div>
+
+                    <h3>
+                        Itinerary Matcher
+                    </h3>
+
+                    <p>
+                        Find travel packages and itineraries that
+                        closely match the trip you want to take.
+                    </p>
+
+                    <a href="#">
+                        Match Itineraries →
+                    </a>
+
+                </div>
+
+
+                <!-- EXPLORE -->
+
+                <div class="ts-home-feature">
+
+                    <div class="ts-home-feature-icon">
+                        🌎
+                    </div>
+
+                    <h3>
+                        Explore Destinations
+                    </h3>
+
+                    <p>
+                        Browse destinations and discover places
+                        that could become your next adventure.
+                    </p>
+
+                    <a href="#">
+                        Explore Places →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- UPCOMING TRIP -->
+
+            <div class="ts-upcoming">
+
+                <div class="ts-home-title">
+                    Your Upcoming Trip
+                </div>
+
+                <div class="ts-trip-card">
+
+                    <div class="ts-trip-top">
+
+                        <div>
+
+                            <div class="ts-trip-location">
+                                Upcoming Trip
+                            </div>
+
+                            <h3>
+                                Nainital Adventure
+                            </h3>
+
+                            <div class="ts-trip-info">
+                                📍 Nainital &nbsp; · &nbsp;
+                                4 Days / 3 Nights &nbsp; · &nbsp;
+                                Solo
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="ts-trip-button"
+                            onclick="alert('Opening your itinerary...')"
+                        >
+                            View Itinerary
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="ts-home-sidebar">
+
+            <div class="ts-home-user">
+
+                <div class="ts-home-avatar">
+                    👤
+                </div>
+
+                <div>
+
+                    <div class="ts-home-user-name">
+                        Your Travel Profile
+                    </div>
+
+                    <div class="ts-home-user-location">
+                        Ready for your next trip
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <h3>
+                Your Travel Preferences
+            </h3>
+
+            <p>
+                TravelScout uses these preferences to
+                personalize your recommendations and matches.
+            </p>
+
+
+            <div class="ts-home-preference">
+
+                <div class="ts-home-preference-label">
+                    Travel Style
+                </div>
+
+                <div class="ts-home-preference-value">
+                    Adventure & Nature
+                </div>
+
+            </div>
+
+
+            <div class="ts-home-preference">
+
+                <div class="ts-home-preference-label">
+                    Looking For
+                </div>
+
+                <div class="ts-home-preference-value">
+                    Solo Travellers
+                </div>
+
+            </div>
+
+
+            <div class="ts-home-preference">
+
+                <div class="ts-home-preference-label">
+                    Budget Range
+                </div>
+
+                <div class="ts-home-preference-value">
+                    ₹10,000 – ₹20,000
+                </div>
+
+            </div>
+
+
+            <div class="ts-home-preference">
+
+                <div class="ts-home-preference-label">
+                    Favourite Trip
+                </div>
+
+                <div class="ts-home-preference-value">
+                    Mountains / Nature
+                </div>
+
+            </div>
+
+
+            <div class="ts-home-progress-title">
+
+                <span>
+                    Profile compatibility
+                </span>
+
+                <span>
+                    82%
+                </span>
+
+            </div>
+
+
+            <div class="ts-home-progress">
+
+                <div class="ts-home-progress-bar"></div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</div>

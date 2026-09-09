@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TravelScout — People Matcher</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: #f5f7fb;
+    color: #111827;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+    width: 100%;
+    height: 70px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: #1677ff;
+}
+
+.nav-links {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #4b5563;
+    font-size: 14px;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #1677ff;
+}
+
+.profile-btn {
+    background: #111827;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 9px 17px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.ts-matcher {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 40px 20px 60px;
+}
+
+/* Header */
+
+.ts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.page-title {
+    font-size: 29px;
+    font-weight: 800;
+}
+
+.page-title span {
+    color: #1677ff;
+}
+
+.ts-subtitle {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* Main layout */
+
+.ts-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 310px;
+    gap: 40px;
+    align-items: start;
+}
+
+.ts-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.ts-card {
+    width: 100%;
+    max-width: 510px;
+    background: white;
+    border-radius: 25px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 20px 55px rgba(0,0,0,.12);
+    position: relative;
+    transition: transform .28s ease, opacity .28s ease;
+}
+
+.ts-photo {
+    width: 100%;
+    height: 390px;
+    object-fit: cover;
+    display: block;
+    background: #e5e7eb;
+}
+
+/* Match badge */
+
+.ts-match {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #1677ff;
+    color: white;
+    padding: 9px 15px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 5px 15px rgba(22,119,255,.3);
+}
+
+/* Card info */
+
+.ts-info {
+    padding: 23px 25px 25px;
+}
+
+.ts-name-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.ts-name {
+    font-size: 27px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.ts-age {
+    font-size: 19px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.ts-location {
+    color: #6b7280;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.ts-description {
+    margin: 18px 0;
+    color: #374151;
+    line-height: 1.55;
+    font-size: 15px;
+}
+
+/* Tags */
+
+.ts-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ts-tag {
+    background: #eff6ff;
+    color: #1264d8;
+    border: 1px solid #dbeafe;
+    border-radius: 30px;
+    padding: 7px 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Budget */
+
+.ts-budget {
+    margin-top: 18px;
+    padding-top: 17px;
+    border-top: 1px solid #edf0f3;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.ts-budget-label {
+    color: #6b7280;
+}
+
+.ts-budget-value {
+    font-weight: 800;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.ts-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.ts-action {
+    width: 67px;
+    height: 67px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #e5e7eb;
+    font-size: 25px;
+    cursor: pointer;
+    transition: all .2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ts-action:hover {
+    transform: translateY(-5px) scale(1.04);
+    box-shadow: 0 10px 25px rgba(0,0,0,.12);
+}
+
+.ts-pass {
+    color: #111827;
+}
+
+.ts-pass:hover {
+    border-color: #111827;
+}
+
+.ts-like {
+    background: #1677ff;
+    color: white;
+    border-color: #1677ff;
+    box-shadow: 0 8px 20px rgba(22,119,255,.25);
+}
+
+.ts-like:hover {
+    background: #0b63dc;
+}
+
+.ts-hint {
+    margin-top: 15px;
+    color: #9ca3af;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.ts-sidebar {
+    background: #111827;
+    color: white;
+    border-radius: 22px;
+    padding: 25px;
+    position: sticky;
+    top: 95px;
+}
+
+.ts-sidebar h3 {
+    margin-bottom: 5px;
+    font-size: 19px;
+}
+
+.ts-sidebar > p {
+    color: #9ca3af;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.ts-preference {
+    padding: 14px 0;
+    border-bottom: 1px solid #293242;
+}
+
+.ts-preference-label {
+    color: #9ca3af;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    margin-bottom: 5px;
+}
+
+.ts-preference-value {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.ts-progress-title {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.ts-progress {
+    height: 6px;
+    background: #293242;
+    border-radius: 10px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.ts-progress-bar {
+    height: 100%;
+    width: 82%;
+    background: #1677ff;
+    border-radius: 10px;
+    transition: width .4s ease;
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.ts-empty {
+    display: none;
+    max-width: 510px;
+    width: 100%;
+    padding: 70px 25px;
+    text-align: center;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 25px;
+}
+
+.ts-empty-icon {
+    font-size: 45px;
+    margin-bottom: 15px;
+}
+
+.ts-empty h2 {
+    margin-bottom: 8px;
+}
+
+.ts-empty p {
+    color: #6b7280;
+    margin-bottom: 25px;
+}
+
+.restart-btn {
+    border: none;
+    background: #1677ff;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.restart-btn:hover {
+    background: #0b63dc;
+}
+
+/* =========================
+   MATCH POPUP
+========================= */
+
+.match-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.match-popup {
+    background: white;
+    width: 100%;
+    max-width: 390px;
+    padding: 40px 30px;
+    border-radius: 25px;
+    text-align: center;
+    animation: popup .3s ease;
+}
+
+@keyframes popup {
+    from {
+        transform: scale(.7);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.match-popup .emoji {
+    font-size: 55px;
+    margin-bottom: 15px;
+}
+
+.match-popup h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.match-popup p {
+    color: #6b7280;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.match-popup button {
+    border: none;
+    background: #1677ff;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 800px) {
+
+    .nav-links {
+        display: none;
+    }
+
+    .ts-content {
+        grid-template-columns: 1fr;
+    }
+
+    .ts-sidebar {
+        position: static;
+        order: 2;
+    }
+
+    .ts-photo {
+        height: 350px;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .navbar {
+        padding: 0 18px;
+    }
+
+    .profile-btn {
+        display: none;
+    }
+
+    .ts-matcher {
+        padding: 25px 12px 40px;
+    }
+
+    .ts-header {
+        margin-bottom: 20px;
+    }
+
+    .page-title {
+        font-size: 24px;
+    }
+
+    .ts-subtitle {
+        display: none;
+    }
+
+    .ts-photo {
+        height: 320px;
+    }
+
+    .ts-info {
+        padding: 20px;
+    }
+
+    .ts-name {
+        font-size: 23px;
+    }
+
+    .ts-action {
+        width: 60px;
+        height: 60px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        Travel<span>Scout</span>
+    </div>
+
+    <div class="nav-links">
+        <a href="home.html">Home</a>
+
+        <a href="peoplem.html" class="active">Explore</a>
+
+        <a href="Recommendations.html">
+            Itinerary Matcher
+        </a>
+
+        <a href="Messages.html">Messages</a>
+
+    </div>
+
+    <button class="profile-btn">
+        My Profile
+    </button>
+
+</nav>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="ts-matcher">
+
+    <div class="ts-header">
+
+        <div>
+            <div class="page-title">
+                Find Your <span>Travel People</span>
+            </div>
+
+            <div class="ts-subtitle">
+                Match with travellers who share your travel style
+            </div>
+        </div>
+
+        <div class="ts-subtitle" id="counter">
+            0 matches
+        </div>
+
+    </div>
+
+
+    <div class="ts-content">
+
+        <!-- =========================
+             MATCHER
+        ========================= -->
+
+        <main class="ts-main">
+
+            <div class="ts-card" id="profileCard">
+
+                <div class="ts-match" id="matchScore">
+                    94% Match
+                </div>
+
+                <img
+                    class="ts-photo"
+                    id="profileImage"
+                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=900"
+                    alt="Traveller"
+                >
+
+                <div class="ts-info">
+
+                    <div class="ts-name-row">
+
+                        <h2 class="ts-name" id="profileName">
+                            Dinesh Tripathi
+                        </h2>
+
+                        <span class="ts-age" id="profileAge">
+                            37
+                        </span>
+
+                    </div>
+
+                    <div class="ts-location" id="profileLocation">
+                        📍 Nainital
+                    </div>
+
+                    <div class="ts-description" id="profileDescription">
+                        Loves mountains, chilling in nature and doing
+                        spontaneous stuff. Always up for an unplanned
+                        adventure.
+                    </div>
+
+                    <div class="ts-tags" id="profileTags">
+
+                        <span class="ts-tag">
+                            🏔 Mountains
+                        </span>
+
+                        <span class="ts-tag">
+                            🌲 Nature
+                        </span>
+
+                        <span class="ts-tag">
+                            ✨ Spontaneous
+                        </span>
+
+                    </div>
+
+                    <div class="ts-budget">
+
+                        <span class="ts-budget-label">
+                            Trip Budget
+                        </span>
+
+                        <span
+                            class="ts-budget-value"
+                            id="profileBudget"
+                        >
+                            $10,000
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- EMPTY STATE -->
+
+            <div class="ts-empty" id="emptyState">
+
+                <div class="ts-empty-icon">
+                    ✈️
+                </div>
+
+                <h2>
+                    No more matches
+                </h2>
+
+                <p>
+                    You've reached the end of your current
+                    TravelScout recommendations.
+                </p>
+
+                <button
+                    class="restart-btn"
+                    onclick="restartProfiles()"
+                >
+                    Start Again
+                </button>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="ts-actions" id="actionButtons">
+
+                <button
+                    class="ts-action ts-pass"
+                    onclick="nextProfile('pass')"
+                    aria-label="Pass"
+                >
+                    ✕
+                </button>
+
+                <button
+                    class="ts-action ts-like"
+                    onclick="nextProfile('like')"
+                    aria-label="Like"
+                >
+                    ♥
+                </button>
+
+            </div>
+
+            <div class="ts-hint">
+                Choose a traveller based on your travel style
+            </div>
+
+        </main>
+
+
+        <!-- =========================
+             SIDEBAR
+        ========================= -->
+
+        <aside class="ts-sidebar">
+
+            <h3>
+                Your Match Preferences
+            </h3>
+
+            <p>
+                TravelScout uses your interests, budget and
+                travel style to find compatible travellers.
+            </p>
+
+
+            <div class="ts-preference">
+
+                <div class="ts-preference-label">
+                    Travel Style
+                </div>
+
+                <div class="ts-preference-value">
+                    Adventure & Nature
+                </div>
+
+            </div>
+
+
+            <div class="ts-preference">
+
+                <div class="ts-preference-label">
+                    Looking For
+                </div>
+
+                <div class="ts-preference-value">
+                    Spontaneous Travellers
+                </div>
+
+            </div>
+
+
+            <div class="ts-preference">
+
+                <div class="ts-preference-label">
+                    Budget Range
+                </div>
+
+                <div class="ts-preference-value">
+                    $5,000 – $15,000
+                </div>
+
+            </div>
+
+
+            <div class="ts-preference">
+
+                <div class="ts-preference-label">
+                    Trip Type
+                </div>
+
+                <div class="ts-preference-value">
+                    Mountains / Nature
+                </div>
+
+            </div>
+
+
+            <div class="ts-progress-title">
+
+                <span>
+                    Profile compatibility
+                </span>
+
+                <span id="compatibility">
+                    82%
+                </span>
+
+            </div>
+
+            <div class="ts-progress">
+
+                <div
+                    class="ts-progress-bar"
+                    id="progressBar"
+                ></div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MATCH POPUP
+========================= -->
+
+<div
+    class="match-overlay"
+    id="matchOverlay"
+>
+
+    <div class="match-popup">
+
+        <div class="emoji">
+            🎉
+        </div>
+
+        <h2>
+            It's a Match!
+        </h2>
+
+        <p id="matchMessage">
+            You and this traveller seem like a great
+            travel combination.
+        </p>
+
+        <button onclick="closeMatch()">
+            Continue Exploring
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =================================
+   PROFILE DATA
+================================= */
+
+const profiles = [
+
+    {
+        name: "Dinesh Tripathi",
+        age: "37",
+        location: "Nainital",
+        match: 94,
+        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=900",
+        description:
+            "Loves mountains, chilling in nature and doing spontaneous stuff. Always up for an unplanned adventure.",
+        tags: [
+            "🏔 Mountains",
+            "🌲 Nature",
+            "✨ Spontaneous"
+        ],
+        budget: "$10,000"
+    },
+
+    {
+        name: "Prakash Ahuja",
+        age: "20",
+        location: "Mumbai",
+        match: 72,
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900",
+        description:
+            "Into nightlife, discovering cool cafés and travelling in style. Loves finding new places to hang out.",
+        tags: [
+            "🎉 Clubbing",
+            "☕ Cafés",
+            "✨ Luxury"
+        ],
+        budget: "$50,000"
+    },
+
+    {
+        name: "Arjun Mehta",
+        age: "28",
+        location: "Delhi",
+        match: 88,
+        image: "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=900",
+        description:
+            "Weekend explorer who loves road trips, trekking and discovering places that aren't on the usual tourist list.",
+        tags: [
+            "🚗 Road Trips",
+            "🥾 Trekking",
+            "🗺 Exploration"
+        ],
+        budget: "$15,000"
+    },
+
+    {
+        name: "Rahul Kapoor",
+        age: "25",
+        location: "Bangalore",
+        match: 91,
+        image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=900",
+        description:
+            "Always looking for the next adventure. Loves hiking, photography and finding hidden places.",
+        tags: [
+            "📸 Photography",
+            "🥾 Hiking",
+            "🌄 Adventure"
+        ],
+        budget: "$12,000"
+    },
+
+    {
+        name: "Kabir Sharma",
+        age: "31",
+        location: "Pune",
+        match: 84,
+        image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=900",
+        description:
+            "Slow traveller who prefers scenic places, good food and long conversations over rushing through tourist attractions.",
+        tags: [
+            "🍜 Food",
+            "🌿 Nature",
+            "☕ Cafés"
+        ],
+        budget: "$14,000"
+    }
+
+];
+
+
+/* =================================
+   STATE
+================================= */
+
+let currentProfile = 0;
+let likes = 0;
+
+
+/* =================================
+   LOAD PROFILE
+================================= */
+
+function loadProfile() {
+
+    const p = profiles[currentProfile];
+
+    document.getElementById("profileImage").src =
+        p.image;
+
+    document.getElementById("profileName").textContent =
+        p.name;
+
+    document.getElementById("profileAge").textContent =
+        p.age;
+
+    document.getElementById("profileLocation").textContent =
+        "📍 " + p.location;
+
+    document.getElementById("profileDescription").textContent =
+        p.description;
+
+    document.getElementById("profileBudget").textContent =
+        p.budget;
+
+    document.getElementById("matchScore").textContent =
+        p.match + "% Match";
+
+    document.getElementById("profileTags").innerHTML =
+        p.tags.map(function(tag) {
+
+            return `
+                <span class="ts-tag">
+                    ${tag}
+                </span>
+            `;
+
+        }).join("");
+
+    document.getElementById("compatibility").textContent =
+        p.match + "%";
+
+    document.getElementById("progressBar").style.width =
+        p.match + "%";
+
+}
+
+
+/* =================================
+   NEXT PROFILE
+================================= */
+
+function nextProfile(action) {
+
+    const card =
+        document.getElementById("profileCard");
+
+    const current =
+        profiles[currentProfile];
+
+
+    /* Show match popup for high compatibility likes */
+
+    if (
+        action === "like" &&
+        current.match >= 88
+    ) {
+
+        likes++;
+
+        document.getElementById("counter").textContent =
+            likes + (likes === 1 ? " match" : " matches");
+
+        document.getElementById("matchMessage").textContent =
+            "You and " +
+            current.name +
+            " have a " +
+            current.match +
+            "% travel compatibility.";
+
+        document.getElementById("matchOverlay").style.display =
+            "flex";
+    }
+
+
+    /* Animation */
+
+    card.style.transform =
+        action === "like"
+            ? "translateX(120%) rotate(12deg)"
+            : "translateX(-120%) rotate(-12deg)";
+
+    card.style.opacity = "0";
+
+
+    setTimeout(function() {
+
+        currentProfile++;
+
+
+        /* No profiles remaining */
+
+        if (currentProfile >= profiles.length) {
+
+            card.style.display = "none";
+
+            document.getElementById(
+                "actionButtons"
+            ).style.display = "none";
+
+            document.getElementById(
+                "emptyState"
+            ).style.display = "block";
+
+            return;
+        }
+
+
+        /* Load next */
+
+        loadProfile();
+
+
+        /* Reset card */
+
+        card.style.transform =
+            "translateX(0) rotate(0)";
+
+        card.style.opacity = "1";
+
+    }, 280);
+
+}
+
+
+/* =================================
+   CLOSE MATCH POPUP
+================================= */
+
+function closeMatch() {
+
+    document.getElementById(
+        "matchOverlay"
+    ).style.display = "none";
+
+}
+
+
+/* =================================
+   RESTART
+================================= */
+
+function restartProfiles() {
+
+    currentProfile = 0;
+
+    const card =
+        document.getElementById("profileCard");
+
+    card.style.display = "block";
+    card.style.opacity = "1";
+    card.style.transform =
+        "translateX(0) rotate(0)";
+
+    document.getElementById(
+        "emptyState"
+    ).style.display = "none";
+
+    document.getElementById(
+        "actionButtons"
+    ).style.display = "flex";
+
+    loadProfile();
+
+}
+
+
+/* =================================
+   KEYBOARD CONTROLS
+================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "ArrowLeft"
+        ) {
+
+            nextProfile("pass");
+
+        }
+
+        if (
+            event.key === "ArrowRight"
+        ) {
+
+            nextProfile("like");
+
+        }
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeMatch();
+
+        }
+
+    }
+);
+
+
+/* =================================
+   INITIAL LOAD
+================================= */
+
+loadProfile();
+
+</script>
+
+</body>
+</html>

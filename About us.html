@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TravelScout — About</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f6f8fc;
+    color: #111827;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+
+/* NAVBAR */
+
+.ts-nav {
+    height: 70px;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.ts-logo {
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.ts-logo span {
+    color: #3975e6;
+}
+
+.ts-nav-links {
+    display: flex;
+    gap: 28px;
+}
+
+.ts-nav-links a {
+    text-decoration: none;
+    color: #667085;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.ts-nav-links a:hover,
+.ts-nav-links .active {
+    color: #3975e6;
+}
+
+.ts-profile {
+    background: #111827;
+    color: white;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* MAIN */
+
+.ts-container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 60px 25px;
+}
+
+/* HERO */
+
+.ts-hero {
+    text-align: center;
+    padding: 55px 0 65px;
+}
+
+.ts-hero h1 {
+    font-size: 52px;
+    margin: 15px 0;
+    letter-spacing: -1.5px;
+}
+
+.ts-hero h1 span {
+    color: #3975e6;
+}
+
+.ts-hero p {
+    font-size: 19px;
+    line-height: 1.7;
+    color: #687386;
+    max-width: 700px;
+    margin: auto;
+}
+
+/* INTRO CARD */
+
+.ts-card {
+    background: white;
+    border-radius: 25px;
+    padding: 45px;
+    margin-bottom: 60px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.06);
+}
+
+.ts-card h2 {
+    font-size: 30px;
+    margin-top: 0;
+}
+
+.ts-card p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #667085;
+}
+
+/* FEATURES */
+
+.ts-section-title {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 30px;
+}
+
+.ts-features {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.ts-feature {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 6px 25px rgba(0,0,0,.05);
+    transition: .25s;
+    cursor: pointer;
+}
+
+.ts-feature:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0,0,0,.1);
+}
+
+.ts-feature-icon {
+    font-size: 35px;
+}
+
+.ts-feature h3 {
+    margin-bottom: 10px;
+}
+
+.ts-feature p {
+    color: #697386;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.ts-feature button {
+    border: none;
+    background: #eff5ff;
+    color: #3975e6;
+    padding: 8px 13px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* CTA */
+
+.ts-cta {
+    margin-top: 70px;
+    background: #111827;
+    color: white;
+    border-radius: 25px;
+    padding: 55px 30px;
+    text-align: center;
+}
+
+.ts-cta h2 {
+    font-size: 32px;
+    margin-top: 0;
+}
+
+.ts-cta p {
+    color: #aeb6c5;
+    font-size: 17px;
+}
+
+.ts-cta button {
+    margin-top: 15px;
+    border: none;
+    background: #3975e6;
+    color: white;
+    padding: 13px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.ts-cta button:hover {
+    background: #2862cc;
+}
+
+/* FEEDBACK */
+
+.ts-feedback {
+    margin-top: 60px;
+    background: white;
+    border-radius: 25px;
+    padding: 40px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.05);
+}
+
+.ts-feedback h2 {
+    margin-top: 0;
+}
+
+.ts-feedback p {
+    color: #697386;
+}
+
+.ts-input,
+.ts-textarea {
+    width: 100%;
+    border: 1px solid #dfe3e8;
+    border-radius: 12px;
+    padding: 13px;
+    margin-top: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+}
+
+.ts-input:focus,
+.ts-textarea:focus {
+    border-color: #3975e6;
+}
+
+.ts-textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+.ts-submit {
+    margin-top: 15px;
+    background: #3975e6;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.ts-feedback-message {
+    display: none;
+    margin-top: 15px;
+    color: #3975e6;
+    font-weight: 600;
+}
+
+/* FOOTER */
+
+.ts-footer {
+    text-align: center;
+    padding: 35px 20px;
+    color: #8a94a6;
+    font-size: 13px;
+}
+
+/* MOBILE */
+
+@media (max-width: 850px) {
+
+    .ts-features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ts-nav-links {
+        display: none;
+    }
+}
+
+@media (max-width: 550px) {
+
+    .ts-container {
+        padding: 30px 15px;
+    }
+
+    .ts-hero {
+        padding: 35px 0 45px;
+    }
+
+    .ts-hero h1 {
+        font-size: 38px;
+    }
+
+    .ts-hero p {
+        font-size: 16px;
+    }
+
+    .ts-card {
+        padding: 28px;
+    }
+
+    .ts-features {
+        grid-template-columns: 1fr;
+    }
+
+    .ts-cta {
+        padding: 40px 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="ts-nav">
+
+    <div class="ts-logo">
+        Travel<span>Scout</span>
+    </div>
+
+    <div class="ts-nav-links">
+        <a href="">Home</a>
+        <a href="#">Explore</a>
+        <a href="#">People</a>
+        <a href="#">Itineraries</a>
+        <a href="#" class="active">About</a>
+    </div>
+
+    <button class="ts-profile">
+        My Profile
+    </button>
+
+</nav>
+
+
+<!-- MAIN -->
+
+<main class="ts-container">
+
+    <!-- HERO -->
+
+    <section class="ts-hero">
+
+        <h1>
+            Your one stop for
+            <span>solo travel.</span>
+        </h1>
+
+        <p>
+            TravelScout is your personal travel companion for
+            discovering places, building better itineraries and
+            finding people who want to explore the world just like you.
+        </p>
+
+    </section>
+
+
+    <!-- WHAT IS TRAVELSCOUT -->
+
+    <section class="ts-card">
+
+        <h2>
+            What is TravelScout?
+        </h2>
+
+        <p>
+            Planning a trip can mean opening dozens of tabs,
+            comparing itineraries, searching for things to do
+            and wondering whether anyone else is going to the
+            same place.
+        </p>
+
+        <p>
+            TravelScout brings all of that together in one place.
+            Our platform combines AI-powered recommendations,
+            itinerary matching and a people finder designed
+            especially for travelers who want to explore without
+            necessarily traveling alone.
+        </p>
+
+    </section>
+
+
+    <!-- FEATURES -->
+
+    <h2 class="ts-section-title">
+        What we offer
+    </h2>
+
+    <section class="ts-features">
+
+        <div class="ts-feature"
+             onclick="featureClicked('TravelScout')">
+
+            <div class="ts-feature-icon">
+                🧭
+            </div>
+
+            <h3>
+                TravelScout
+            </h3>
+
+            <p>
+                Your central travel companion for discovering
+                destinations, planning trips and keeping
+                everything organized.
+            </p>
+
+            <button>
+                Explore →
+            </button>
+
+        </div>
+
+
+        <div class="ts-feature"
+             onclick="featureClicked('Itinerary Matcher')">
+
+            <div class="ts-feature-icon">
+                🗺️
+            </div>
+
+            <h3>
+                Itinerary Matcher
+            </h3>
+
+            <p>
+                Find travelers whose plans, destinations
+                and travel styles match your own.
+            </p>
+
+            <button>
+                Find Matches →
+            </button>
+
+        </div>
+
+
+        <div class="ts-feature"
+             onclick="featureClicked('AI Recommendations')">
+
+            <div class="ts-feature-icon">
+                ✨
+            </div>
+
+            <h3>
+                AI Recommendations
+            </h3>
+
+            <p>
+                Get personalized suggestions for places,
+                activities, food and experiences based on
+                what you enjoy.
+            </p>
+
+            <button>
+                Get Ideas →
+            </button>
+
+        </div>
+
+
+        <div class="ts-feature"
+             onclick="featureClicked('People Finder')">
+
+            <div class="ts-feature-icon">
+                👥
+            </div>
+
+            <h3>
+                People Finder
+            </h3>
+
+            <p>
+                Meet other travelers heading your way and
+                make solo travel feel a little less solo.
+            </p>
+
+            <button>
+                Find People →
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- CTA -->
+
+    <section class="ts-cta">
+
+        <h2>
+            The world is better when you explore it.
+        </h2>
+
+        <p>
+            Discover somewhere new. Find your people.
+            Make the trip yours.
+        </p>
+
+        <button onclick="startExploring()">
+            Start Exploring →
+        </button>
+
+    </section>
+
+
+    <!-- FEEDBACK -->
+
+    <section class="ts-feedback">
+
+        <h2>
+            Help us make TravelScout better
+        </h2>
+
+        <p>
+            Have an idea, suggestion or something you think
+            we could improve? We'd love to hear it.
+        </p>
+
+        <input
+            class="ts-input"
+            id="feedbackName"
+            type="text"
+            placeholder="Your name"
+        >
+
+        <textarea
+            class="ts-textarea"
+            id="feedbackText"
+            placeholder="Tell us what you think..."
+        ></textarea>
+
+        <br>
+
+        <button
+            class="ts-submit"
+            onclick="submitFeedback()"
+        >
+            Send Feedback
+        </button>
+
+        <div
+            class="ts-feedback-message"
+            id="feedbackMessage"
+        >
+            ✓ Thanks! Your feedback has been recorded.
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer class="ts-footer">
+
+    © 2026 TravelScout · Discover. Match. Explore.
+
+</footer>
+
+
+<script>
+
+/* FEATURE CLICK */
+
+function featureClicked(feature) {
+
+    alert(
+        feature +
+        " will be available from the TravelScout dashboard."
+    );
+
+}
+
+
+/* CTA */
+
+function startExploring() {
+
+    alert(
+        "Welcome to TravelScout! Your exploration starts here."
+    );
+
+}
+
+
+/* FEEDBACK */
+
+function submitFeedback() {
+
+    const name =
+        document.getElementById("feedbackName").value.trim();
+
+    const feedback =
+        document.getElementById("feedbackText").value.trim();
+
+    if (!name || !feedback) {
+
+        alert(
+            "Please enter your name and feedback."
+        );
+
+        return;
+    }
+
+    /*
+       Static version:
+       The feedback is only stored locally in the browser.
+    */
+
+    const feedbacks =
+        JSON.parse(
+            localStorage.getItem("travelscout_feedback") || "[]"
+        );
+
+    feedbacks.push({
+
+        name: name,
+
+        feedback: feedback,
+
+        date: new Date().toLocaleString()
+
+    });
+
+    localStorage.setItem(
+        "travelscout_feedback",
+        JSON.stringify(feedbacks)
+    );
+
+
+    document.getElementById(
+        "feedbackMessage"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "feedbackName"
+    ).value = "";
+
+    document.getElementById(
+        "feedbackText"
+    ).value = "";
+
+}
+
+</script>
+
+</body>
+</html>
+```
