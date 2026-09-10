@@ -184,6 +184,9 @@ class AuthManager {
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 4px;">
+                <button id="ts-profile-builder-btn" style="width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; color: #1677ff;">
+                    Profile Builder
+                </button>
                 <button id="ts-set-gemini-btn" style="width: 100%; text-align: left; background: none; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; color: #1677ff;">
                     Gemini API Key Settings
                 </button>
@@ -194,6 +197,11 @@ class AuthManager {
         `;
 
         document.body.appendChild(menu);
+
+        document.getElementById('ts-profile-builder-btn').onclick = () => {
+            menu.remove();
+            window.location.href = 'Profile builder.html';
+        };
 
         document.getElementById('ts-set-gemini-btn').onclick = () => {
             menu.remove();
