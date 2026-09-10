@@ -487,6 +487,65 @@ body {
 
 
     <!-- =========================
+         GEMINI AI COUNTRY SUGGESTIONS
+    ========================= -->
+    <section style="background: linear-gradient(135deg, #111827 0%, #1f2937 100%); color: white; border-radius: 24px; padding: 32px 30px; margin-bottom: 45px; box-shadow: 0 12px 32px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.08);">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 18px; margin-bottom: 22px;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px; color: #60a5fa; font-size: 13px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;">
+                    GEMINI AI TRAVEL SCOUT
+                </div>
+                <h2 style="font-size: 26px; margin: 4px 0 0; font-weight: 800;">Personalized Country Suggestions</h2>
+            </div>
+            
+            <button onclick="window.GeminiService.openApiKeyModal()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 9px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;">
+                Gemini API Key Settings
+            </button>
+        </div>
+
+        <!-- USER PROFILE BADGE INJECTOR -->
+        <div id="ts-user-profile-banner" style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 12px 16px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 13px; color: #d1d5db;">
+            <div id="ts-banner-info">
+                <strong>Traveler Profile:</strong> Sign in to auto-apply your age, nationality & travel style!
+            </div>
+            <a href="login.html" id="ts-banner-action" style="color: #60a5fa; text-decoration: none; font-weight: 700;">Sign In / Edit Profile</a>
+        </div>
+
+        <!-- COUNTRY PROMPT INPUT -->
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: 700; font-size: 15px; margin-bottom: 10px; color: #f3f4f6;">
+                Which country do you want to visit?
+            </label>
+
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <input type="text" id="ts-country-input" placeholder="e.g. Japan, Italy, France, India, Switzerland, Spain, Thailand..." style="flex: 1; min-width: 260px; padding: 14px 18px; border-radius: 12px; border: 1px solid #374151; background: #1f2937; color: white; font-size: 15px; outline: none;" onkeydown="if(event.key==='Enter') generateCountrySuggestions()">
+                
+                <button onclick="generateCountrySuggestions()" style="padding: 14px 26px; background: #1677ff; color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#0b63dc'" onmouseout="this.style.background='#1677ff'">
+                    Get Suggestions
+                </button>
+            </div>
+        </div>
+
+        <!-- QUICK COUNTRY PRESETS -->
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 25px;">
+            <span style="font-size: 12px; color: #9ca3af; align-self: center;">Popular:</span>
+            <button onclick="selectCountryPreset('Japan')" style="background: rgba(255,255,255,0.08); border: none; color: #e5e7eb; padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; cursor: pointer;">Japan</button>
+            <button onclick="selectCountryPreset('Italy')" style="background: rgba(255,255,255,0.08); border: none; color: #e5e7eb; padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; cursor: pointer;">Italy</button>
+            <button onclick="selectCountryPreset('France')" style="background: rgba(255,255,255,0.08); border: none; color: #e5e7eb; padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; cursor: pointer;">France</button>
+            <button onclick="selectCountryPreset('India')" style="background: rgba(255,255,255,0.08); border: none; color: #e5e7eb; padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; cursor: pointer;">India</button>
+            <button onclick="selectCountryPreset('Switzerland')" style="background: rgba(255,255,255,0.08); border: none; color: #e5e7eb; padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; cursor: pointer;">Switzerland</button>
+            <button onclick="selectCountryPreset('Spain')" style="background: rgba(255,255,255,0.08); border: none; color: #e5e7eb; padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; cursor: pointer;">Spain</button>
+            <button onclick="selectCountryPreset('Thailand')" style="background: rgba(255,255,255,0.08); border: none; color: #e5e7eb; padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; cursor: pointer;">Thailand</button>
+        </div>
+
+        <!-- RESULTS CONTAINER -->
+        <div id="ts-gemini-results" style="display: none; background: #ffffff; color: #1f2937; border-radius: 16px; padding: 24px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: tsFadeIn 0.3s ease;">
+            <div id="ts-results-content" style="font-size: 14px; line-height: 1.6;"></div>
+        </div>
+    </section>
+
+    <!-- =========================
          PREFERENCES
     ========================= -->
 
@@ -1053,7 +1112,100 @@ document.getElementById(
     }
 );
 
+/* =========================
+   GEMINI AI INTEGRATION
+========================= */
+
+function selectCountryPreset(country) {
+    document.getElementById('ts-country-input').value = country;
+    generateCountrySuggestions();
+}
+
+async function generateCountrySuggestions() {
+    const input = document.getElementById('ts-country-input');
+    const country = input.value.trim();
+    
+    if (!country) {
+        alert('Please enter or select a country to visit!');
+        input.focus();
+        return;
+    }
+
+    const resultsBox = document.getElementById('ts-gemini-results');
+    const contentBox = document.getElementById('ts-results-content');
+    
+    resultsBox.style.display = 'block';
+    contentBox.innerHTML = `
+        <div style="text-align: center; padding: 30px 20px;">
+            <div style="font-weight: 700; font-size: 16px; color: #111827; margin-bottom: 6px;">
+                Gemini AI is analyzing travel options for ${country}...
+            </div>
+            <div style="font-size: 13px; color: #6b7280;">
+                Tailoring recommendations for your age, nationality & travel style preference.
+            </div>
+        </div>
+    `;
+
+    const userProfile = window.Auth ? window.Auth.getCurrentUser() : null;
+    const res = await window.GeminiService.getCountrySuggestions(country, userProfile);
+
+    if (res.success) {
+        // Format basic markdown/headings
+        let html = res.content
+            .replace(/### (.*?)\n/g, '<h3 style="font-size: 20px; font-weight: 800; color: #111827; margin: 18px 0 10px; border-bottom: 1px solid #f3f4f6; padding-bottom: 6px;">$1</h3>')
+            .replace(/#### (.*?)\n/g, '<h4 style="font-size: 16px; font-weight: 700; color: #1677ff; margin: 16px 0 8px;">$1</h4>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/- (.*?)\n/g, '<li style="margin-bottom: 6px; line-height: 1.5;">$1</li>')
+            .replace(/\n\n/g, '<br>');
+
+        contentBox.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 12px 16px; border-radius: 10px; margin-bottom: 18px; border: 1px solid #e2e8f0;">
+                <div style="font-weight: 700; font-size: 14px; color: #0f172a;">
+                    Country Focus: <span style="color: #1677ff;">${country}</span> ${res.isLiveGemini ? '(Live Gemini AI)' : '(Intelligent Engine)'}
+                </div>
+                <button onclick="copySuggestions()" style="background: #1677ff; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                    Copy Suggestions
+                </button>
+            </div>
+            <div>${html}</div>
+        `;
+    } else {
+        contentBox.innerHTML = `<div style="color: #ef4444; font-weight: 600;">Failed to generate suggestions. Please check your network or Gemini API Key.</div>`;
+    }
+}
+
+function copySuggestions() {
+    const text = document.getElementById('ts-results-content').innerText;
+    navigator.clipboard.writeText(text);
+    alert('Country suggestions copied to clipboard!');
+}
+
+function updateRecommendationsBanner() {
+    const user = window.Auth ? window.Auth.getCurrentUser() : null;
+    const bannerInfo = document.getElementById('ts-banner-info');
+    const bannerAction = document.getElementById('ts-banner-action');
+    
+    if (user && bannerInfo) {
+        bannerInfo.innerHTML = `
+            <strong>Traveler Profile:</strong> ${user.name} (${user.age} yo, ${user.nationality}) • <strong>Style:</strong> ${user.groupTravel}
+        `;
+        bannerAction.textContent = 'Edit Profile / Account';
+        
+        // Auto-fill favorite country if available
+        if (user.favCountry && !document.getElementById('ts-country-input').value) {
+            document.getElementById('ts-country-input').value = user.favCountry;
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', updateRecommendationsBanner);
 </script>
+
+<!-- Global Modules -->
+<script src="js/auth.js"></script>
+<script src="js/gemini.js"></script>
+<script src="js/chatbot.js"></script>
 
 </body>
 </html>

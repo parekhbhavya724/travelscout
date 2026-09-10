@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelScout — Sign In & Profile Onboarding</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 15px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .ts-auth-card {
+            width: 100%;
+            max-width: 480px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 24px;
+            padding: 40px 36px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            position: relative;
+            z-index: 10;
+        }
+
+        .ts-logo {
+            font-size: 28px;
+            font-weight: 800;
+            text-align: center;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+            color: #111827;
+        }
+
+        .ts-logo span {
+            color: #1677ff;
+        }
+
+        .ts-stepper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .ts-step-dot {
+            height: 6px;
+            border-radius: 10px;
+            background: #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .ts-step-dot.active {
+            background: #1677ff;
+            width: 32px;
+        }
+
+        .ts-step-dot.inactive {
+            width: 12px;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 8px;
+            color: #111827;
+        }
+
+        .subtitle {
+            color: #4b5563;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 13px 16px;
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            color: #111827;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #1677ff;
+            box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15);
+            background: #ffffff;
+        }
+
+        select option {
+            background: #ffffff;
+            color: #111827;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .radio-card {
+            flex: 1;
+            padding: 12px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            transition: 0.2s;
+            user-select: none;
+        }
+
+        .radio-card.selected {
+            border-color: #1677ff;
+            background: #edf4ff;
+            color: #1677ff;
+        }
+
+        .radio-card input {
+            display: none;
+        }
+
+        .ts-btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: #1677ff;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(22, 119, 255, 0.25);
+            margin-top: 10px;
+        }
+
+        .ts-btn-primary:hover {
+            background: #0b63dc;
+            transform: translateY(-1px);
+        }
+
+        .ts-btn-secondary {
+            width: 100%;
+            padding: 12px;
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 12px;
+        }
+
+        .ts-btn-secondary:hover {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .ts-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+        .ts-divider::before, .ts-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .ts-alert {
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 18px;
+            display: none;
+        }
+
+        .ts-alert.error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .ts-alert.info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+        }
+
+        .ts-footer-link {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .ts-footer-link a {
+            color: #1677ff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+
+    <div class="ts-auth-card">
+        
+        <div class="ts-logo">
+            Travel<span>Scout</span>
+        </div>
+
+        <div class="ts-stepper">
+            <div class="ts-step-dot active" id="dot-1"></div>
+            <div class="ts-step-dot inactive" id="dot-2"></div>
+        </div>
+
+        <div id="ts-alert" class="ts-alert"></div>
+
+        <!-- STEP 1: EMAIL & PASSWORD -->
+        <form id="form-step-1" onsubmit="handleStep1(event)">
+            <h2>Welcome to TravelScout</h2>
+            <p class="subtitle">Sign in or enter your email to get started</p>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required placeholder="alex@example.com" autocomplete="email">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="••••••••" autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="ts-btn-primary">
+                Continue with Email
+            </button>
+
+            <div class="ts-divider">OR INSTANT TESTING</div>
+
+            <button type="button" class="ts-btn-secondary" onclick="quickDemoLogin()">
+                Quick Demo Login (Alex, 26 yo)
+            </button>
+        </form>
+
+        <!-- STEP 2: PROFILE ONBOARDING (NAME, AGE, GENDER, NATIONALITY, FAV COUNTRY, GROUP TRAVEL) -->
+        <form id="form-step-2" style="display: none;" onsubmit="handleStep2(event)">
+            <h2>Complete Your Travel Profile</h2>
+            <p class="subtitle">Tell us a bit about yourself for personalized AI suggestions</p>
+
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" required placeholder="e.g. Alex Morgan">
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" min="16" max="100" required placeholder="26">
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" required>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Non-binary">Non-binary</option>
+                        <option value="Prefer not to say">Prefer not to say</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="nationality">Nationality</label>
+                <input type="text" id="nationality" required placeholder="e.g. American, Indian, Japanese, French...">
+            </div>
+
+            <div class="form-group">
+                <label for="favCountry">Favorite Country to Visit</label>
+                <input type="text" id="favCountry" required placeholder="e.g. Japan, Italy, Switzerland...">
+            </div>
+
+            <div class="form-group">
+                <label>Are you looking for Group Traveling?</label>
+                <div class="radio-group">
+                    <div class="radio-card selected" id="radio-group-yes" onclick="selectGroupOption('Yes, looking for group traveling', 'radio-group-yes')">
+                        Yes (Group Travel)
+                    </div>
+                    <div class="radio-card" id="radio-group-no" onclick="selectGroupOption('No, solo traveler', 'radio-group-no')">
+                        No (Solo Traveler)
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="ts-btn-primary">
+                Complete Setup & Explore
+            </button>
+            
+            <button type="button" class="ts-btn-secondary" onclick="backToStep1()">
+                Back
+            </button>
+        </form>
+
+        <div class="ts-footer-link">
+            <a href="home.html">Back to TravelScout Home</a>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script>
+        let currentEmail = '';
+        let currentPassword = '';
+        let selectedGroupTravel = 'Yes, looking for group traveling';
+
+        function showAlert(msg, type = 'error') {
+            const alert = document.getElementById('ts-alert');
+            alert.textContent = msg;
+            alert.className = `ts-alert ${type}`;
+            alert.style.display = 'block';
+        }
+
+        function hideAlert() {
+            document.getElementById('ts-alert').style.display = 'none';
+        }
+
+        function handleStep1(e) {
+            e.preventDefault();
+            hideAlert();
+
+            currentEmail = document.getElementById('email').value.trim();
+            currentPassword = document.getElementById('password').value.trim();
+
+            if (!currentEmail || !currentPassword) {
+                showAlert('Please enter both email and password.');
+                return;
+            }
+
+            // Check if user already exists
+            const existingUser = window.Auth.getUsers().find(u => u.email.toLowerCase() === currentEmail.toLowerCase());
+
+            if (existingUser) {
+                // Log in existing user directly
+                window.Auth.setCurrentUser(existingUser);
+                showAlert(`Welcome back, ${existingUser.name}! Redirecting...`, 'info');
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 800);
+            } else {
+                // Email recognized as new user -> move to Step 2 Onboarding
+                document.getElementById('form-step-1').style.display = 'none';
+                document.getElementById('form-step-2').style.display = 'block';
+                document.getElementById('dot-1').className = 'ts-step-dot inactive';
+                document.getElementById('dot-2').className = 'ts-step-dot active';
+                showAlert('Email recognized! Please complete your profile onboarding below.', 'info');
+            }
+        }
+
+        function selectGroupOption(value, elementId) {
+            selectedGroupTravel = value;
+            document.getElementById('radio-group-yes').className = 'radio-card';
+            document.getElementById('radio-group-no').className = 'radio-card';
+            document.getElementById(elementId).className = 'radio-card selected';
+        }
+
+        function handleStep2(e) {
+            e.preventDefault();
+            hideAlert();
+
+            const profileData = {
+                email: currentEmail,
+                password: currentPassword,
+                name: document.getElementById('name').value.trim(),
+                age: parseInt(document.getElementById('age').value) || 25,
+                gender: document.getElementById('gender').value,
+                nationality: document.getElementById('nationality').value.trim(),
+                favCountry: document.getElementById('favCountry').value.trim(),
+                groupTravel: selectedGroupTravel
+            };
+
+            const result = window.Auth.register(profileData);
+            if (result.success) {
+                showAlert('Profile created successfully! Loading TravelScout...', 'info');
+                setTimeout(() => {
+                    window.location.href = 'Recommendations.html';
+                }, 900);
+            } else {
+                showAlert('Failed to save profile. Please try again.');
+            }
+        }
+
+        function backToStep1() {
+            hideAlert();
+            document.getElementById('form-step-2').style.display = 'none';
+            document.getElementById('form-step-1').style.display = 'block';
+            document.getElementById('dot-2').className = 'ts-step-dot inactive';
+            document.getElementById('dot-1').className = 'ts-step-dot active';
+        }
+
+        function quickDemoLogin() {
+            window.Auth.loginAsDemo();
+            showAlert('Logged in as Demo User (Alex Morgan)! Redirecting...', 'info');
+            setTimeout(() => {
+                window.location.href = 'home.html';
+            }, 700);
+        }
+    </script>
+
+    <!-- Global Modules -->
+    <script src="js/gemini.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+</html>
